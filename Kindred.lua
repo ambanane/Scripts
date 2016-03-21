@@ -25,6 +25,16 @@ KindredMenu.Draw:Boolean("DrawR", "Draw R Range", true)
 
 OnTick(function (myHero)
 
+	--[[
+	Qdmg = 0
+	Wdmg = 0
+	Edmg = 0
+
+	Qdmg = CalcDamage(myHero, target, 30 + 30 * GetCastLevel(myHero, _Q) + 0.2 * (GetBaseDamage(myHero) + GetBonusDmg(myHero)), 0)
+	Wdmg = CalcDamage(myHero, target, 20 + 5 * GetCastLevel(myHero, _W) + 0.4 * (GetBaseDamage(myHero) + GetBonusDmg(myHero)), 0)
+	Edmg = CalcDamage(myHero, target, 30 + 30 * GetCastLevel(myHero, _E) + 0.2 * (GetBaseDamage(myHero) + GetBonusDmg(myHero)) + GetCurrentHP(enemy) * 0.05, 0)
+	]]--
+
 	local target = GetCurrentTarget()
 
 	if IOW:Mode() == "Combo" then
@@ -49,6 +59,7 @@ OnTick(function (myHero)
 	end
 
 	for _, enemy in pairs(GetEnemyHeroes()) do
+
 		if KindredMenu.Killsteal.KQ:Value() and Ready(_Q) and ValidTarget(enemy, 830) then
 			if GetCurrentHP(enemy) < CalcDamage(myHero, enemy, 30 + 30 * GetCastLevel(myHero, _Q) + 0.2 * (GetBaseDamage(myHero) + GetBonusDmg(myHero)), 0) then
 				CastSkillShot(_Q, enemy)
@@ -56,21 +67,25 @@ OnTick(function (myHero)
 		end
 	end
 
-	if KindredMenu.Misc.SelfR:Value() and Ready(_R) then
-		if GetCurrentHP(myHero) < GetMaxHP(myHero) * 0.2 and Ready(_R) then
-			CastTargetSpell(myHero, _R)
-		end
-	end
-
 	for _, ally in pairs(GetAllyHeroes()) do
-		if KindredMenu.Misc.AllyR:Value() and Ready(_R) and GetDistance(ally, myHero) < 400 then
+		
+		if KindredMenu.Misc.SelfR:Value() and Ready(_R) and GetDistance(myHero, ClosestEnemy()) < 400 then
+			if GetCurrentHP(myHero) < GetMaxHP(myHero) * 0.2 and Ready(_R) then
+				CastTargetSpell(myHero, _R)
+			end
+		end
+
+		if KindredMenu.Misc.AllyR:Value() and Ready(_R) and GetDistance(ally, myHero) < 400 and GetDistance(ally, ClosestEnemy()) < 400 then
 			if GetCurrentHP(ally) < GetMaxHP(ally) * 0.2 and Ready(_R) then
 				CastTargetSpell(ally, _R)
 			end
-		end		
+		end
 	end
 
-	OnDraw(function (myHero)
+end)
+
+OnDraw(function (myHero)
+
 		if KindredMenu.Draw.DrawQDash:Value() then
 			DrawCircle(GetOrigin(myHero), 340, 0, 200, GoS.Yellow)
 		end
@@ -91,4 +106,5 @@ OnTick(function (myHero)
 			DrawCircle(GetOrigin(myHero), 500, 0, 200, GoS.Pink)
 		end
 	end)
-end)
+
+print("Kindred by ambanane Loaded!")
