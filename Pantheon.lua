@@ -11,6 +11,7 @@ PantheonMenu.Combo:Boolean("E", "Use E in combo", true)
 
 PantheonMenu:SubMenu("Killsteal", "Killsteal")
 PantheonMenu.Killsteal:Boolean("KQ", "Killsteal with Q", true)
+PantheonMenu.Killsteal:Boolean("KR", "Killsteal with R", false)
 
 PantheonMenu:SubMenu("Draw", "Draw")
 PantheonMenu.Draw:Boolean("DrawQ", "Draw QWE range", true)
@@ -45,6 +46,12 @@ OnTick(function (myHero)
 				CastTargetSpell(enemy, _Q)
 			end
 		end
+
+		if PantheonMenu.Killsteal.KR:Value() and Ready(_R) and ValidTarget(enemy, 5500) then
+			if GetCurrentHP(enemy) < CalcDamage(myHero, enemy, 0, 50 + 150 * GetCastLevel(myHero, _R) + GetBonusAP(myHero) * 0.5) then
+				CastTargetSpell(enemy, _R)
+			end
+		end
 	end
 end)
 
@@ -57,4 +64,4 @@ end)
 	
 
 
-print("Pantheon loaded")
+print("Pantheon by ambanane loaded")
