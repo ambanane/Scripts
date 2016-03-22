@@ -5,6 +5,7 @@ require("Inspired")
 local KindredMenu = Menu("Kindred", "Kindred")
 KindredMenu:SubMenu("Combo", "Combo")
 KindredMenu.Combo:Boolean("Q", "Use Q in combo", true)
+KindredMenu.Combo:Boolean("QMouse", "ON: Q on Mouse - OFF: Q on Enemy", false)
 KindredMenu.Combo:Boolean("W", "Use W in combo", true)
 KindredMenu.Combo:Boolean("E", "Use E in combo", true)
 
@@ -42,9 +43,15 @@ OnTick(function (myHero)
 		if KindredMenu.Combo.W:Value() and Ready(_W) and ValidTarget(target, 800) then
 			CastSpell(_W)
 		end
-
-		if KindredMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, 830) then
-			CastSkillShot(_Q, target)
+		
+		if KindredMenu.Combo.QMouse:Value() then
+			if KindredMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, 500) then
+				CastSkillShot(_Q, GetMousePos())
+			end
+		else
+			if KindredMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, 830) then
+				CastSkillShot(_Q, target)
+			end
 		end
 
 		if KindredMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, 500) then
