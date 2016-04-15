@@ -1,6 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "Nasus" then return end
 
-require("Inspired")
 
 if GetCastName(myHero,SUMMONER_1):lower() == "summonerdot" then
 	Ignite = SUMMONER_1
