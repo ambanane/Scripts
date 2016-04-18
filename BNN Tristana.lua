@@ -49,75 +49,75 @@ OnTick(function (myHero)
 	--AUTO LEVEL UP
 	if TristanaMenu.Misc.Level:Value() then
 
-		if GetLevel(myHero) == 1 then
+		if GetLevel(myHero) == 1 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_E)
 
-		elseif GetLevel(myHero) == 2 then
+		elseif GetLevel(myHero) == 2 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_W)
 
-		elseif GetLevel(myHero) == 3 then
+		elseif GetLevel(myHero) == 3 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_Q)
 
-		elseif GetLevel(myHero) == 4 then
+		elseif GetLevel(myHero) == 4 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_E)
 
-		elseif GetLevel(myHero) == 5 then
+		elseif GetLevel(myHero) == 5 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_E)
 
-		elseif GetLevel(myHero) == 6 then
+		elseif GetLevel(myHero) == 6 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_R)
 
-		elseif GetLevel(myHero) == 7 then
+		elseif GetLevel(myHero) == 7 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_E)
 
-		elseif GetLevel(myHero) == 8 then
+		elseif GetLevel(myHero) == 8 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_Q)
 
-		elseif GetLevel(myHero) == 9 then
+		elseif GetLevel(myHero) == 9 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_E)
 
-		elseif GetLevel(myHero) == 10 then
+		elseif GetLevel(myHero) == 10 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_Q)
 
-		elseif GetLevel(myHero) == 11 then
+		elseif GetLevel(myHero) == 11 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_R)
 
-		elseif GetLevel(myHero) == 12 then
+		elseif GetLevel(myHero) == 12 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_Q)
 
-		elseif GetLevel(myHero) == 13 then
+		elseif GetLevel(myHero) == 13 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_Q)
 
-		elseif GetLevel(myHero) == 14 then
+		elseif GetLevel(myHero) == 14 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_W)
 
-		elseif GetLevel(myHero) == 15 then
+		elseif GetLevel(myHero) == 15 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_W)
 
-		elseif GetLevel(myHero) == 16 then
+		elseif GetLevel(myHero) == 16 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_R)
 
-		elseif GetLevel(myHero) == 17 then
+		elseif GetLevel(myHero) == 17 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_W)
 
-		elseif GetLevel(myHero) == 18 then
+		elseif GetLevel(myHero) == 18 and GetLevelPoints(myHero) >= 1 then
 
 			LevelSpell(_W)
 
