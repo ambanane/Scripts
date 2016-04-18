@@ -49,79 +49,10 @@ OnTick(function (myHero)
 	--AUTO LEVEL UP
 	if TristanaMenu.Misc.Level:Value() then
 
-		if GetLevel(myHero) == 1 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_E)
-
-		elseif GetLevel(myHero) == 2 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_W)
-
-		elseif GetLevel(myHero) == 3 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_Q)
-
-		elseif GetLevel(myHero) == 4 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_E)
-
-		elseif GetLevel(myHero) == 5 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_E)
-
-		elseif GetLevel(myHero) == 6 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_R)
-
-		elseif GetLevel(myHero) == 7 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_E)
-
-		elseif GetLevel(myHero) == 8 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_Q)
-
-		elseif GetLevel(myHero) == 9 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_E)
-
-		elseif GetLevel(myHero) == 10 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_Q)
-
-		elseif GetLevel(myHero) == 11 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_R)
-
-		elseif GetLevel(myHero) == 12 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_Q)
-
-		elseif GetLevel(myHero) == 13 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_Q)
-
-		elseif GetLevel(myHero) == 14 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_W)
-
-		elseif GetLevel(myHero) == 15 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_W)
-
-		elseif GetLevel(myHero) == 16 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_R)
-
-		elseif GetLevel(myHero) == 17 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_W)
-
-		elseif GetLevel(myHero) == 18 and GetLevelPoints(myHero) >= 1 then
-
-			LevelSpell(_W)
-
-		end
+			spellorder = {_E, _W, _Q, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
+			if GetLevelPoints(myHero) > 0 then
+				LevelSpell(spellorder[GetLevel(myHero) + 1 - GetLevelPoints(myHero)])
+			end
 
 	end
 
@@ -355,7 +286,6 @@ OnDraw(function (myHero)
 			end
 		end
 	end
-
 end)
 
 --DRAW CIRCLE ON MINIMAP FOR ENEMY JUNGLER
