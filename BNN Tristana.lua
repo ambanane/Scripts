@@ -3,7 +3,6 @@ if GetObjectName(GetMyHero()) ~= "Tristana" then return end
 local TristanaMenu = Menu("Tristana", "BNN Tristana")
 
 TristanaMenu:SubMenu("Combo", "Combo")
-
 TristanaMenu.Combo:Boolean("Q", "Use Q in combo", true)
 TristanaMenu.Combo:Boolean("W", "Use W in combo", true)
 TristanaMenu.Combo:Boolean("E", "Use E in combo", true)
