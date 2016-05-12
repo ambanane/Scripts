@@ -1,5 +1,19 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
+local ver = "0.1"
+
+function AutoUpdate(data)
+    if tonumber(data) > tonumber(ver) then
+        PrintChat('<font color = "#00FFFF">New version found! ' .. data)
+        PrintChat('<font color = "#00FFFF">Downloading update, please wait...')
+        DownloadFileAsync('https://raw.githubusercontent.com/ambanane/Scripts/master/CorruptRyze.lua', SCRIPT_PATH .. 'CorruptRyze.lua', function() PrintChat('<font color = "#00FFFF">Update Complete, please 2x F6!') return end)
+    else
+        PrintChat('<font color = "#00FFFF">No updates found!')
+    end
+end
+
+GetWebResultAsync('https://raw.githubusercontent.com/ambanane/Scripts/master/CorruptRyze.version', AutoUpdate)
+
 --MENU
 local RyzeMenu = Menu('Ryze', 'Corrupt Ryze')
 
