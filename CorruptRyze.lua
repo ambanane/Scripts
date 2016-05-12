@@ -88,7 +88,7 @@ OnTick(function (myHero)
 
 	function ComboW()
 		if RyzeMenu.Combo.W:Value() and Ready(_W) and ValidTarget(target, WRange) then
-			CastTargetSpell(target, W)
+			CastTargetSpell(target, _W)
 		end
 	end
 
