@@ -615,4 +615,3 @@ end)
 
 print('<font color = "#00FFFF"><b>[Corrupt Ryze]</b> <font color = "#FFFFFF">by ambanane Loaded!')
 print('<font color = "#FFFFFF">->Please select <font color = "#FF0000"><b>IOW</b><font color = "#FFFFFF"> Orbwalker!')
-print('Test')
