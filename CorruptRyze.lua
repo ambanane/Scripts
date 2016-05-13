@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
- ver = "0.2"
+ ver = "0.3"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -30,9 +30,11 @@ RyzeMenu.Killsteal:Boolean('KE', 'Killsteal with E', true)
 
 RyzeMenu:SubMenu('Farm', 'Farm')
 RyzeMenu.Farm:Boolean('LH', 'Last hit minions AA', false)
-RyzeMenu.Farm:Boolean('LHQ', 'Last hit Q big minions', false)
+RyzeMenu.Farm:Boolean('LHQ', 'Last hit Q small minions', false)
+RyzeMenu.Farm:Boolean('LHBQ', 'Last hit Q big minions', false)
 RyzeMenu.Farm:Slider('MQ', 'If mana % is higher than', 50, 10, 100, 5)
-RyzeMenu.Farm:Boolean('LHW', 'Last hit W big minions', false)
+RyzeMenu.Farm:Boolean('LHW', 'Last hit W small minions', false)
+RyzeMenu.Farm:Boolean('LHBW', 'Last hit W big minions', false)
 RyzeMenu.Farm:Slider('MW', 'If mana % is higher than', 50, 10, 100, 5)
 
 RyzeMenu:SubMenu('Misc', 'Misc')
@@ -234,8 +236,8 @@ OnTick(function (myHero)
 
 	else
 
-		--LAST HIT MINIONS W
-		if RyzeMenu.Farm.LHW:Value() then
+		--LAST HIT BIG MINIONS W
+		if RyzeMenu.Farm.LHBW:Value() then
 			if GetCurrentMana(myHero) > GetMaxMana(myHero) * RyzeMenu.Farm.MW:Value() / 100 then
 				if not UnderTurret(GetOrigin(myHero), enemyTurret) then
 					if IsObjectAlive(myHero) then
@@ -245,8 +247,8 @@ OnTick(function (myHero)
 								if GetTeam(myHero) == 100 then
 
 									if GetObjectName(minion) == SuperMinionRed then
-										if Ready(_Q) then
-											CastSkillShot(_Q, minion)
+										if Ready(_W) then
+											CastTargetSpell(minion, _W)
 										end
 									end
 
@@ -281,8 +283,8 @@ OnTick(function (myHero)
 			end
 		end
 
-		--LAST HIT MINIONS Q
-		if RyzeMenu.Farm.LHQ:Value() then
+		--LAST HIT BIG MINIONS Q
+		if RyzeMenu.Farm.LHBQ:Value() then
 			if GetCurrentMana(myHero) > GetMaxMana(myHero) * RyzeMenu.Farm.MQ:Value() / 100 then
 				if not UnderTurret(GetOrigin(myHero), enemyTurret) then
 					if IsObjectAlive(myHero) then
@@ -291,24 +293,78 @@ OnTick(function (myHero)
 
 							if ValidTarget(minion, QRange) and GetCurrentHP(minion) < QDmg then
 								if GetTeam(myHero) == 100 then
+
+									if GetObjectName(minion) == SuperMinionRed then
+										if Ready(_Q) then
+											CastSkillShot(_Q, minion)
+										end
+									end
+
 									if GetObjectName(minion) == BigMinionRed then
 										if Ready(_Q) then
 											CastSkillShot(_Q, minion)
 										end
 									end
+
 								end
 
 								if GetTeam(myHero) == 200 then
+
+									if GetObjectName(minion) == SuperMinionBlue then
+										if Ready(_Q) then
+											CastSkillShot(_Q, minion)
+										end
+									end
+
 									if GetObjectName(minion) == BigMinionBlue then
 										if Ready(_Q) then
 											CastSkillShot(_Q, minion)
 										end
 									end
+
 								end
 
 							end
 						end
 
+					end
+				end
+			end
+		end
+
+		--LAST HIT SMALL MINIONS W
+		if RyzeMenu.Farm.LHW:Value() then
+			if GetCurrentMana(myHero) > GetMaxMana(myHero) * RyzeMenu.Farm.MW:Value() / 100 then
+				if not UnderTurret(GetOrigin(myHero), enemyTurret) then
+					if IsObjectAlive(myHero) then
+						for _, minion in pairs(minionManager.objects) do
+							if GetObjectName(minion) ~= BigMinionBlue and GetObjectName(minion) ~= BigMinionRed and GetObjectName(minion) ~= SuperMinionBlue and GetObjectName(minion) ~= SuperMinionRed then
+								if ValidTarget(minion, WRange) and GetCurrentHP(minion) < WDmg then
+									if Ready(_W) then
+										CastTargetSpell(minion, _W)
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+
+		--LAST HIT SMALL MINIONS Q
+		if RyzeMenu.Farm.LHQ:Value() then
+			if GetCurrentMana(myHero) > GetMaxMana(myHero) * RyzeMenu.Farm.MQ:Value() / 100 then
+				if not UnderTurret(GetOrigin(myHero), enemyTurret) then
+					if IsObjectAlive(myHero) then
+						for _, minion in pairs(minionManager.objects) do
+							if GetObjectName(minion) ~= BigMinionBlue and GetObjectName(minion) ~= BigMinionRed and GetObjectName(minion) ~= SuperMinionBlue and GetObjectName(minion) ~= SuperMinionRed then
+								if ValidTarget(minion, QRange) and GetCurrentHP(minion) < QDmg then
+									if Ready(_Q) then
+										CastSkillShot(_Q, minion)
+									end
+								end
+							end
+						end
 					end
 				end
 			end
