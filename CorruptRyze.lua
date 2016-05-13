@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
-local ver = "0.1"
+ ver = "0.2"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -15,7 +15,7 @@ end
 GetWebResultAsync('https://raw.githubusercontent.com/ambanane/Scripts/master/CorruptRyze.version', AutoUpdate)
 
 --MENU
-local RyzeMenu = Menu('Ryze', 'Corrupt Ryze')
+ RyzeMenu = Menu('Ryze', 'Corrupt Ryze')
 
 RyzeMenu:SubMenu('Combo', 'Combo')
 RyzeMenu.Combo:Boolean('Q', 'Use Q', true)
@@ -50,33 +50,6 @@ RyzeMenu.Drawings:Boolean('DS', 'Draw passive stacks', true)
 RyzeMenu.Drawings:Boolean('DCM', 'Draw circle on minions', true)
 RyzeMenu.Drawings:Boolean('SF', 'Draw if slower or faster', true)
 RyzeMenu.Drawings:Boolean('CT', 'Draw circle on curent target', true)
-
-OnTick(function (myHero)
-
-	--VARIABLES
-	local stacksData = GetBuffData(myHero, 'RyzePassiveStack')
-	local passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
-	local Stacks = stacksData.Count
-	local Passive = passiveData.Count
-	local target = GetCurrentTarget()
-	local MaxMana = GetMaxMana(myHero)
-	local MaxHP = GetMaxHP(myHero)
-	local CurrentHP = GetCurrentHP(myHero)
-	local BaseAD = GetBaseDamage(myHero)
-	local BonusAD = GetBonusDmg(myHero)
-	local BonusAP = GetBonusAP(myHero)
-	local MeleeRange = 550
-	local QRange = 900
-	local WRange = 600
-	local ERange = 600
-	local QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
-	local WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
-	local EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
-	local QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
-	local BigMinionBlue = 'SRU_OrderMinionSiege'
-	local BigMinionRed = 'SRU_ChaosMinionSiege'
-	local SuperMinionBlue = 'SRU_OrderMinionSuper'
-	local SuperMinionRed = 'SRU_ChaosMinionSuper'
 
 	function ComboQ()
 		if RyzeMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, QRange) then
@@ -210,6 +183,33 @@ OnTick(function (myHero)
 		end
 	end
 
+OnTick(function (myHero)
+
+	--VARIABLES
+	 stacksData = GetBuffData(myHero, 'RyzePassiveStack')
+	 passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
+	 Stacks = stacksData.Count
+	 Passive = passiveData.Count
+	 target = GetCurrentTarget()
+	 MaxMana = GetMaxMana(myHero)
+	 MaxHP = GetMaxHP(myHero)
+	 CurrentHP = GetCurrentHP(myHero)
+	 BaseAD = GetBaseDamage(myHero)
+	 BonusAD = GetBonusDmg(myHero)
+	 BonusAP = GetBonusAP(myHero)
+	 MeleeRange = 550
+	 QRange = 900
+	 WRange = 600
+	 ERange = 600
+	 QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
+	 WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
+	 EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
+	 QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
+	 BigMinionBlue = 'SRU_OrderMinionSiege'
+	 BigMinionRed = 'SRU_ChaosMinionSiege'
+	 SuperMinionBlue = 'SRU_OrderMinionSuper'
+	 SuperMinionRed = 'SRU_ChaosMinionSuper'
+
 	--COMBO
 	if IOW:Mode() == 'Combo' then
 
@@ -330,7 +330,7 @@ OnTick(function (myHero)
 	--KILLSTEAL
 	for _, enemy in pairs(GetEnemyHeroes()) do
 
-		local QPredEnemy = GetPredictionForPlayer(myHeroPos(), enemy, GetMoveSpeed(enemy), 1700, 250, 900, 50, true, true)
+		 QPredEnemy = GetPredictionForPlayer(myHeroPos(), enemy, GetMoveSpeed(enemy), 1700, 250, 900, 50, true, true)
 		
 		if RyzeMenu.Killsteal.KQ:Value() and Ready(_Q) and ValidTarget(enemy, QRange) then
 			if GetCurrentHP(enemy) < CalcDamage(myHero, enemy, 0, QDmg) then
@@ -358,7 +358,7 @@ OnTick(function (myHero)
 	for _, enemy in pairs(GetEnemyHeroes()) do
 		
 		if GetCastName(myHero, SUMMONER_1) == 'SummonerDot' then
-			local Ignite = SUMMONER_1
+			 Ignite = SUMMONER_1
 			if ValidTarget(enemy, 600) then
 				if 20 * GetLevel(myHero) + 50 > GetCurrentHP(enemy) + GetHPRegen(enemy) * 3 then
 					CastTargetSpell(enemy, Ignite)
@@ -366,7 +366,7 @@ OnTick(function (myHero)
 			end
 
 		elseif GetCastName(myHero, SUMMONER_2) == 'SummonerDot' then
-			local Ignite = SUMMONER_2
+			 Ignite = SUMMONER_2
 			if ValidTarget(enemy, 600) then
 				if 20 * GetLevel(myHero) + 50 > GetCurrentHP(enemy) + GetHPRegen(enemy) * 3 then
 					CastTargetSpell(enemy, Ignite)
@@ -407,27 +407,27 @@ OnDraw(function (myHero)
 	HeroSkinChanger(myHero, RyzeMenu.Misc.Skin.SC:Value() - 1)
 
 	--VARIABLES
-	local myPos = myHero
-	local drawPos = WorldToScreen(1, myPos.x, myPos.y, myPos.z)
-	local stacksData = GetBuffData(myHero, 'RyzePassiveStack')
-	local passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
-	local Stacks = stacksData.Count
-	local Passive = passiveData.Count
-	local target = GetCurrentTarget()
-	local MaxMana = GetMaxMana(myHero)
-	local MaxHP = GetMaxHP(myHero)
-	local CurrentHP = GetCurrentHP(myHero)
-	local BaseAD = GetBaseDamage(myHero)
-	local BonusAD = GetBonusDmg(myHero)
-	local BonusAP = GetBonusAP(myHero)
-	local MeleeRange = 550
-	local QRange = 900
-	local WRange = 600
-	local ERange = 600
-	local QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
-	local WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
-	local EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
-	local QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
+	 myPos = myHero
+	 drawPos = WorldToScreen(1, myPos.x, myPos.y, myPos.z)
+	 stacksData = GetBuffData(myHero, 'RyzePassiveStack')
+	 passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
+	 Stacks = stacksData.Count
+	 Passive = passiveData.Count
+	 target = GetCurrentTarget()
+	 MaxMana = GetMaxMana(myHero)
+	 MaxHP = GetMaxHP(myHero)
+	 CurrentHP = GetCurrentHP(myHero)
+	 BaseAD = GetBaseDamage(myHero)
+	 BonusAD = GetBonusDmg(myHero)
+	 BonusAP = GetBonusAP(myHero)
+	 MeleeRange = 550
+	 QRange = 900
+	 WRange = 600
+	 ERange = 600
+	 QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
+	 WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
+	 EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
+	 QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
 
 	--STACKS DRAWING
 	if RyzeMenu.Drawings.DS:Value() then
@@ -450,8 +450,8 @@ OnDraw(function (myHero)
 				if IsObjectAlive(enemy) then
 					if IsVisible(enemy) then
 						if GetCastName(enemy, SUMMONER_1) == 'SummonerSmite' or GetCastName(enemy, SUMMONER_2) == 'SummonerSmite' or GetCastName(enemy, SUMMONER_1) == 'S5_SummonerSmitePlayerGanker' or GetCastName(enemy, SUMMONER_2) == 'S5_SummonerSmitePlayerGanker' or GetCastName(enemy, SUMMONER_1) == 'S5_SummonerSmiteDuel' or GetCastName(enemy, SUMMONER_2) == 'S5_SummonerSmiteDuel' then
-							local junglerPos = WorldToScreen(0, GetOrigin(enemy))
-							local myPos = WorldToScreen(1, GetOrigin(myHero))
+							 junglerPos = WorldToScreen(0, GetOrigin(enemy))
+							 myPos = WorldToScreen(1, GetOrigin(myHero))
 
 							if GetDistance(myHero, enemy) > 2000 then
 
@@ -502,8 +502,8 @@ OnDraw(function (myHero)
 		if ValidTarget(enemy) then
 
 			--DRAW IF KILLABLE
-			local enemyPos = GetOrigin(enemy)
-			local drawpos = WorldToScreen(1,enemyPos.x, enemyPos.y, enemyPos.z)
+			 enemyPos = GetOrigin(enemy)
+			 drawpos = WorldToScreen(1,enemyPos.x, enemyPos.y, enemyPos.z)
 
 			if GetCurrentHP(enemy) < CalcDamage(myHero, enemy, 0, QDmg) and Ready(_Q) then
 
