@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
- ver = "0.3"
+ ver = "0.4"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -18,6 +18,7 @@ GetWebResultAsync('https://raw.githubusercontent.com/ambanane/Scripts/master/Cor
  RyzeMenu = Menu('Ryze', 'Corrupt Ryze')
 
 RyzeMenu:SubMenu('Combo', 'Combo')
+RyzeMenu.Combo:DropDown('ComboMode', 'Combo mode', 1, {'Based on stacks (recommended)', 'QWE without R', 'QWE with R'})
 RyzeMenu.Combo:Boolean('Q', 'Use Q', true)
 RyzeMenu.Combo:Boolean('W', 'Use W', true)
 RyzeMenu.Combo:Boolean('E', 'Use E', true)
@@ -53,6 +54,9 @@ RyzeMenu.Drawings:Boolean('DCM', 'Draw circle on minions', true)
 RyzeMenu.Drawings:Boolean('SF', 'Draw if slower or faster', true)
 RyzeMenu.Drawings:Boolean('CT', 'Draw circle on curent target', true)
 
+--COMBO FUNCTIONS
+
+	--BASED ON STACKS
 	function ComboQ()
 		if RyzeMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, QRange) then
 			if QPredTarget.HitChance == 1 then
@@ -185,51 +189,106 @@ RyzeMenu.Drawings:Boolean('CT', 'Draw circle on curent target', true)
 		end
 	end
 
+	--QWE WITHOUT R
+	function QWE()
+
+		if RyzeMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, QRange) then
+			if QPredTarget.HitChance == 1 then
+				CastSkillShot(_Q, QPredTarget.PredPos)
+			end
+		end
+
+		if RyzeMenu.Combo.W:Value() and Ready(_W) and ValidTarget(target, WRange) then
+			CastTargetSpell(target, _W)
+		end
+
+		if RyzeMenu.Combo.E:Value() and Ready(_E) and ValidTarget(target, ERange) then
+			CastTargetSpell(target, _E)
+		end
+
+	end
+
+	--QWE WITH R
+	function QWER()
+
+		if RyzeMenu.Combo.Q:Value() and Ready(_Q) and ValidTarget(target, QRange) then
+			if QPredTarget.HitChance == 1 then
+				CastSkillShot(_Q, QPredTarget.PredPos)
+			end
+		end
+
+		if RyzeMenu.Combo.W:Value() and Ready(_W) and ValidTarget(target, WRange) then
+			CastTargetSpell(target, _W)
+		end
+
+		if RyzeMenu.Combo.E:Value() and Ready(_E) and ValidTarget(target, ERange) then
+			CastTargetSpell(target, _E)
+		end
+
+		if RyzeMenu.Combo.R:Value() and Ready(_R) and ValidTarget(target, QRange) then
+			CastSpell(_R)
+		end
+
+	end
+
 OnTick(function (myHero)
 
 	--VARIABLES
-	 stacksData = GetBuffData(myHero, 'RyzePassiveStack')
-	 passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
-	 Stacks = stacksData.Count
-	 Passive = passiveData.Count
-	 target = GetCurrentTarget()
-	 MaxMana = GetMaxMana(myHero)
-	 MaxHP = GetMaxHP(myHero)
-	 CurrentHP = GetCurrentHP(myHero)
-	 BaseAD = GetBaseDamage(myHero)
-	 BonusAD = GetBonusDmg(myHero)
-	 BonusAP = GetBonusAP(myHero)
-	 MeleeRange = 550
-	 QRange = 900
-	 WRange = 600
-	 ERange = 600
-	 QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
-	 WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
-	 EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
-	 QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
-	 BigMinionBlue = 'SRU_OrderMinionSiege'
-	 BigMinionRed = 'SRU_ChaosMinionSiege'
-	 SuperMinionBlue = 'SRU_OrderMinionSuper'
-	 SuperMinionRed = 'SRU_ChaosMinionSuper'
+	stacksData = GetBuffData(myHero, 'RyzePassiveStack')
+	passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
+	Stacks = stacksData.Count
+	Passive = passiveData.Count
+	target = GetCurrentTarget()
+	MaxMana = GetMaxMana(myHero)
+	MaxHP = GetMaxHP(myHero)
+	CurrentHP = GetCurrentHP(myHero)
+	BaseAD = GetBaseDamage(myHero)
+	BonusAD = GetBonusDmg(myHero)
+	BonusAP = GetBonusAP(myHero)
+	MeleeRange = 550
+	QRange = 900
+	WRange = 600
+	ERange = 600
+	QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
+	WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
+	EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
+	QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
+	BigMinionBlue = 'SRU_OrderMinionSiege'
+	BigMinionRed = 'SRU_ChaosMinionSiege'
+	SuperMinionBlue = 'SRU_OrderMinionSuper'
+	SuperMinionRed = 'SRU_ChaosMinionSuper'
 
 	--COMBO
 	if IOW:Mode() == 'Combo' then
 
-		if GetLevel(myHero) < 6 then
+		--BASED ON STACKS
+		if RyzeMenu.Combo.ComboMode:Value() == 1 then
 
-			ComboStacks0()
-			ComboStacks1()
-			ComboStacks2()
-			ComboStacks3()
-			ComboStacks4()
+			if GetLevel(myHero) < 6 then
 
-		else
+				ComboStacks0()
+				ComboStacks1()
+				ComboStacks2()
+				ComboStacks3()
+				ComboStacks4()
 
-			ComboStacks0()
-			ComboStacks1Ult()
-			ComboStacks2Ult()
-			ComboStacks3Ult()
-			ComboStacks4()
+			else
+
+				ComboStacks0()
+				ComboStacks1Ult()
+				ComboStacks2Ult()
+				ComboStacks3Ult()
+				ComboStacks4()
+
+			end
+		
+		elseif RyzeMenu.Combo.ComboMode:Value() == 2 then
+
+			QWE()
+
+		elseif RyzeMenu.Combo.ComboMode:Value() == 3 then
+
+			QWER()
 
 		end
 
@@ -463,27 +522,27 @@ OnDraw(function (myHero)
 	HeroSkinChanger(myHero, RyzeMenu.Misc.Skin.SC:Value() - 1)
 
 	--VARIABLES
-	 myPos = myHero
-	 drawPos = WorldToScreen(1, myPos.x, myPos.y, myPos.z)
-	 stacksData = GetBuffData(myHero, 'RyzePassiveStack')
-	 passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
-	 Stacks = stacksData.Count
-	 Passive = passiveData.Count
-	 target = GetCurrentTarget()
-	 MaxMana = GetMaxMana(myHero)
-	 MaxHP = GetMaxHP(myHero)
-	 CurrentHP = GetCurrentHP(myHero)
-	 BaseAD = GetBaseDamage(myHero)
-	 BonusAD = GetBonusDmg(myHero)
-	 BonusAP = GetBonusAP(myHero)
-	 MeleeRange = 550
-	 QRange = 900
-	 WRange = 600
-	 ERange = 600
-	 QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
-	 WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
-	 EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
-	 QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
+	local myPos = myHero
+	local drawPos = WorldToScreen(1, myPos.x, myPos.y, myPos.z)
+	local stacksData = GetBuffData(myHero, 'RyzePassiveStack')
+	local passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
+	local Stacks = stacksData.Count
+	local Passive = passiveData.Count
+	local target = GetCurrentTarget()
+	local MaxMana = GetMaxMana(myHero)
+	local MaxHP = GetMaxHP(myHero)
+	local CurrentHP = GetCurrentHP(myHero)
+	local BaseAD = GetBaseDamage(myHero)
+	local BonusAD = GetBonusDmg(myHero)
+	local BonusAP = GetBonusAP(myHero)
+	local MeleeRange = 550
+	local QRange = 900
+	local WRange = 600
+	local ERange = 600
+	local QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
+	local WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
+	local EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
+	local QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
 
 	--STACKS DRAWING
 	if RyzeMenu.Drawings.DS:Value() then
@@ -643,9 +702,9 @@ OnDraw(function (myHero)
 			for _, minion in pairs(minionManager.objects) do
 				if ValidTarget(minion, MeleeRange) then
 					if GetCurrentHP(minion) < BaseAD + BonusAD + (BaseAD + BonusAD) * 0.20 and GetCurrentHP(minion) > BaseAD + BonusAD then
-						DrawCircle(GetOrigin(minion), 50, 2, 8, GoS.Red)
+						DrawCircle(GetOrigin(minion), 50, 2, 8, ARGB(100, 255, 0, 0))
 					elseif GetCurrentHP(minion) < BaseAD + BonusAD then
-						DrawCircle(GetOrigin(minion), 50, 2, 8, GoS.Green)
+						DrawCircle(GetOrigin(minion), 50, 2, 8, ARGB(100, 0, 255, 0))
 					end
 				end
 			end
