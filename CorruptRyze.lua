@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
- ver = "0.5"
+ ver = "0.6"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -49,6 +49,8 @@ RyzeMenu.Misc:Boolean('Ignite', 'Ignite if killable', true)
 RyzeMenu.Misc:Boolean('Level', 'Auto level', true)
 RyzeMenu.Misc:Boolean('JT', 'Enemy jungler tracker', true)
 RyzeMenu.Misc:Boolean('AW', 'Auto W on gap close', true)
+RyzeMenu.Misc:Boolean('Seraph', 'Seraph shield on low HP', true)
+RyzeMenu.Misc:Boolean('Tear', 'Auto stack Tear', false)
 RyzeMenu.Misc:SubMenu('Skin', 'Skin Changer')
 RyzeMenu.Misc.Skin:Slider('SC', 'Select skin', 1, 1, 11)
 
@@ -634,6 +636,46 @@ OnTick(function (myHero)
 					if Ready(_W) then
 						if GetDistance(myHero, enemy) < 200 then
 							CastTargetSpell(enemy, _W)
+						end
+					end
+				end
+			end
+		end
+	end
+
+	--SERAPH'S EMBRACE SHIELD
+	if RyzeMenu.Misc.Seraph:Value() then
+		if IsObjectAlive(myHero) then
+			for _, enemy in pairs(GetEnemyHeroes()) do
+				if GetDistance(myHero, enemy) < 605 then
+					if CurrentHP < MaxHP * 0.20 then
+						if GetItemSlot(myHero, 3040) > 0 then
+							CastSpell(GetItemSlot(myHero, 3040))
+						end
+					end
+				end
+
+				if UnderTurret(myHero, enemyTurret) then
+					if CurrentHP < MaxHP * 0.20 then
+						if GetItemSlot(myHero, 3040) > 0 then
+							CastSpell(GetItemSlot(myHero, 3040))
+						end
+					end
+				end
+			end
+		end
+	end
+
+	--TEAR OF THE GODESS STACKING
+	if RyzeMenu.Misc.Tear:Value() then
+		if IsObjectAlive(myHero) then
+			for _, enemy in pairs(GetEnemyHeroes()) do
+				if GetDistance(myHero, enemy) > 3000 then
+					if not UnderTurret(myHero, enemyTurret) then
+						if GetItemSlot(myHero, 3070) > 0 then
+							if Ready(_Q) then
+								CastSkillShot(_Q, GetOrigin(myHero))
+							end
 						end
 					end
 				end
