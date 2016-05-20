@@ -52,7 +52,6 @@ OnTick(function (myHero)
 		CastSpell(_W)
 	end
 
-	--AUTO IGNITE
 	if EveMenu.Misc.Ghost:Value() then
 
 		if GetCastName(myHero, SUMMONER_1) == "SummonerHaste" and Ready(SUMMONER_1) then
