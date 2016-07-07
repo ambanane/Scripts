@@ -4,7 +4,7 @@ require("Inspired")
 
 if GetCastName(myHero,SUMMONER_1):lower() == "summonerdot" then
 	Ignite = SUMMONER_1
-else GetCastName(myHero,SUMMONER_2):lower() == "summonerdot" then
+elseif GetCastName(myHero,SUMMONER_2):lower() == "summonerdot" then
 	Ignite = SUMMONER_2
 end
 
