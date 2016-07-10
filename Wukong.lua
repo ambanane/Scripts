@@ -127,7 +127,9 @@ OnTick(function (myHero)
 
 		if WukongMenu.Misc.Ignite:Value() and ValidTarget(enemy, 600) then
 			if 20 * GetLevel(myHero) + 50 > GetCurrentHP(enemy) + GetHPRegen(enemy) * 3 then
-				CastTargetSpell(enemy, Ignite)
+				if Ignite then
+					CastTargetSpell(enemy, Ignite)
+				end
 			end
 		end
 	end
