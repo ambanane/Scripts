@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
- ver = "0.6"
+ ver = "0.7"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -18,11 +18,10 @@ GetWebResultAsync('https://raw.githubusercontent.com/ambanane/Scripts/master/Cor
  RyzeMenu = Menu('Ryze', 'Corrupt Ryze')
 
 RyzeMenu:SubMenu('Combo', 'Combo')
-RyzeMenu.Combo:DropDown('ComboMode', 'Combo mode', 1, {'Based on stacks (recommended)', 'Based on stacks #2 (Redmercy)', 'QWE without R', 'QWE with R'})
+RyzeMenu.Combo:DropDown('ComboMode', 'Combo mode', 1, {'QEQW', 'QWQE'})
 RyzeMenu.Combo:Boolean('Q', 'Use Q', true)
 RyzeMenu.Combo:Boolean('W', 'Use W', true)
 RyzeMenu.Combo:Boolean('E', 'Use E', true)
-RyzeMenu.Combo:Boolean('R', 'Use R', true)
 
 RyzeMenu:SubMenu('Killsteal', 'Killsteal')
 RyzeMenu.Killsteal:Boolean('KQ', 'Killsteal with Q', true)
@@ -33,7 +32,6 @@ RyzeMenu:SubMenu('LaneClear', 'Lane clear')
 RyzeMenu.LaneClear:Boolean('LCQ', 'Use Q', true)
 RyzeMenu.LaneClear:Boolean('LCW', 'Use W', true)
 RyzeMenu.LaneClear:Boolean('LCE', 'Use E', true)
-RyzeMenu.LaneClear:Boolean('LCR', 'Use R', true)
 
 RyzeMenu:SubMenu('Farm', 'Farm')
 RyzeMenu.Farm:Boolean('LH', 'Last hit minions AA', false)
@@ -52,12 +50,12 @@ RyzeMenu.Misc:Boolean('AW', 'Auto W on gap close', true)
 RyzeMenu.Misc:Boolean('Seraph', 'Seraph shield on low HP', true)
 RyzeMenu.Misc:Boolean('Tear', 'Auto stack Tear', false)
 RyzeMenu.Misc:SubMenu('Skin', 'Skin Changer')
-RyzeMenu.Misc.Skin:Slider('SC', 'Select skin', 1, 1, 11)
+RyzeMenu.Misc.Skin:Slider('SC', 'Select skin', 1, 1, 10)
 
 RyzeMenu:SubMenu('Drawings', 'Drawings')
 RyzeMenu.Drawings:Boolean('DQ', 'Draw Q range', true)
 RyzeMenu.Drawings:Boolean('DWE', 'Draw W&E range', true)
-RyzeMenu.Drawings:Boolean('DS', 'Draw passive stacks', true)
+RyzeMenu.Drawings:Boolean('DDMG', 'Draw DMG on HP bar', true)
 RyzeMenu.Drawings:Boolean('DCM', 'Draw circle on minions', true)
 RyzeMenu.Drawings:Boolean('SF', 'Draw if slower or faster', true)
 RyzeMenu.Drawings:Boolean('CT', 'Draw circle on curent target', true)
@@ -85,217 +83,9 @@ RyzeMenu.Drawings:Boolean('CT', 'Draw circle on curent target', true)
 		end
 	end
 
-	function ComboR()
-		if RyzeMenu.Combo.R:Value() and Ready(_R) and ValidTarget(target, QRange) then
-			CastSpell(_R)
-		end
-	end
-
-	--BASED ON STACKS
-	function aComboStacks0()
-		if Stacks == 0 then
-			ComboQ()
-			ComboW()
-			ComboE()
-		end
-	end
-
-	function aComboStacks1()
-		if Stacks == 1 then
-			ComboQ()
-			ComboW()
-			ComboE()
-		end
-	end
-
-	function aComboStacks2()
-		if Stacks == 2 then
-			ComboQ()
-			ComboE()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function aComboStacks3()
-		if Stacks == 3 then
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function aComboStacks4()
-		if Stacks == 4 then
-			ComboR()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function aComboStacks1Ult()
-		if Stacks == 1 then
-			ComboR()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function aComboStacks2Ult()
-		if Stacks == 2 then
-			ComboR()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function aComboStacks3Ult()
-		if Stacks == 3 then
-			ComboR()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	--BASED ON STACKS #2 (REDMERCY)
-	function bComboStacks0()
-		if Stacks == 0 then
-			ComboQ()
-			ComboW()
-			ComboE()
-		end
-	end
-
-	function bComboStacks1()
-		if Stacks == 1 then
-			ComboQ()
-			ComboW()
-			ComboE()
-		end
-	end
-
-	function bComboStacks2()
-		if Stacks == 2 then
-			ComboR()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function bComboStacks3()
-		if Stacks == 3 then
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function bComboStacks4()
-		if Stacks == 4 then
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function bComboStacks3Ult()
-		if Stacks == 3 then
-			ComboR()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-			ComboQ()
-			ComboE()
-		end
-	end
-
-	function bComboStacks4Ult()
-		if Stacks == 4 then
-			ComboR()
-			ComboW()
-			ComboQ()
-			ComboE()
-			ComboQ()
-			ComboW()
-		end
-	end
-
-	--QWE WITHOUT R
-	function QWE()
-
-		ComboQ()
-		ComboW()
-		ComboE()
-
-	end
-
-	--QWE WITH R
-	function QWER()
-
-		ComboQ()
-		ComboW()
-		ComboE()
-		ComboR()
-
-	end
-
 OnTick(function (myHero)
 
 	--VARIABLES
-	stacksData = GetBuffData(myHero, 'RyzePassiveStack')
-	passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
-	Stacks = stacksData.Count
-	Passive = passiveData.Count
 	target = GetCurrentTarget()
 	MaxMana = GetMaxMana(myHero)
 	MaxHP = GetMaxHP(myHero)
@@ -307,9 +97,9 @@ OnTick(function (myHero)
 	QRange = 900
 	WRange = 600
 	ERange = 600
-	QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
-	WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
-	EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
+	QDmg = 35 + 25 * GetCastLevel(myHero, _Q) + BonusAP * 0.45 + MaxMana * 0.03
+	WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.2 + MaxMana * 0.01
+	EDmg = 25 + 25 * GetCastLevel(myHero, _E) + BonusAP * 0.3 + MaxMana * 0.02
 	QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
 	BigMinionBlue = 'SRU_OrderMinionSiege'
 	BigMinionRed = 'SRU_ChaosMinionSiege'
@@ -319,60 +109,21 @@ OnTick(function (myHero)
 	--COMBO
 	if IOW:Mode() == 'Combo' then
 
-		--BASED ON STACKS
+		--QEQW
 		if RyzeMenu.Combo.ComboMode:Value() == 1 then
-
-			if GetLevel(myHero) < 6 then
-
-				aComboStacks0()
-				aComboStacks1()
-				aComboStacks2()
-				aComboStacks3()
-				aComboStacks4()
-
-			else
-
-				aComboStacks0()
-				aComboStacks1Ult()
-				aComboStacks2Ult()
-				aComboStacks3Ult()
-				aComboStacks4()
-
-			end
-
-		--BASED ON STACKS #2 (REDMERCY)	
-		elseif RyzeMenu.Combo.ComboMode:Value() == 2 then
-
-			if GetLevel(myHero) < 6 then
-
-				bComboStacks0()
-				bComboStacks1()
-				bComboStacks2()
-				bComboStacks3()
-				bComboStacks4()
-
-			else
-
-				bComboStacks0()
-				bComboStacks1()
-				bComboStacks2()
-				bComboStacks3Ult()
-				bComboStacks4Ult()
-
-			end
-		
-		--QWE WITHOUT R
-		elseif RyzeMenu.Combo.ComboMode:Value() == 3 then
-
-			QWE()
-
-		--QWE WITH R	
-		elseif RyzeMenu.Combo.ComboMode:Value() == 4 then
-
-			QWER()
-
+			ComboQ()
+			ComboE()
+			ComboQ()
+			ComboW()
 		end
 
+		--QWQE
+		if RyzeMenu.Combo.ComboMode:Value() == 2 then
+			ComboQ()
+			ComboW()
+			ComboQ()
+			ComboE()
+		end
 
 	else
 
@@ -527,34 +278,6 @@ OnTick(function (myHero)
 		if IOW:Mode() == 'LaneClear' then
 			for _, minion in pairs(minionManager.objects) do
 
-				if RyzeMenu.LaneClear.LCR:Value() and Ready(_R) then
-					if Stacks > 3 then
-						if RyzeMenu.LaneClear.LCQ:Value() and Ready(_Q) and ValidTarget(minion, QRange) then
-							CastSpell(_R)
-						end
-
-						if RyzeMenu.LaneClear.LCW:Value() and Ready(_W) and ValidTarget(minion, WRange) then
-							CastSpell(_R)
-						end
-
-						if RyzeMenu.LaneClear.LCE:Value() and Ready(_E) and ValidTarget(minion, ERange) then
-							CastSpell(_R)
-						end
-					elseif Passive == 1 then
-						if RyzeMenu.LaneClear.LCQ:Value() and Ready(_Q) and ValidTarget(minion, QRange) then
-							CastSpell(_R)
-						end
-
-						if RyzeMenu.LaneClear.LCW:Value() and Ready(_W) and ValidTarget(minion, WRange) then
-							CastSpell(_R)
-						end
-
-						if RyzeMenu.LaneClear.LCE:Value() and Ready(_E) and ValidTarget(minion, ERange) then
-							CastSpell(_R)
-						end
-					end
-				end
-
 				if RyzeMenu.LaneClear.LCQ:Value() and Ready(_Q) and ValidTarget(minion, QRange) then
 					CastSkillShot(_Q, minion)
 				end
@@ -622,7 +345,7 @@ OnTick(function (myHero)
 
 	--AUTO LEVEL
 	if RyzeMenu.Misc.Level:Value() then
-		spellorder = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
+		spellorder = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _Q, _E, _E}
 		if GetLevelPoints(myHero) > 0 then
 			LevelSpell(spellorder[GetLevel(myHero) + 1 - GetLevelPoints(myHero)])
 		end
@@ -693,10 +416,6 @@ OnDraw(function (myHero)
 	--VARIABLES
 	local myPos = myHero
 	local drawPos = WorldToScreen(1, myPos.x, myPos.y, myPos.z)
-	local stacksData = GetBuffData(myHero, 'RyzePassiveStack')
-	local passiveData = GetBuffData(myHero, 'RyzePassiveCharged')
-	local Stacks = stacksData.Count
-	local Passive = passiveData.Count
 	local target = GetCurrentTarget()
 	local MaxMana = GetMaxMana(myHero)
 	local MaxHP = GetMaxHP(myHero)
@@ -708,17 +427,10 @@ OnDraw(function (myHero)
 	local QRange = 900
 	local WRange = 600
 	local ERange = 600
-	local QDmg = 25 + 35 * GetCastLevel(myHero, _Q) + BonusAP * 0.55 + (1.5 + 0.5 * GetCastLevel(myHero, _Q) / 100 * MaxMana)
-	local WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.4 + MaxMana * 0.025
-	local EDmg = 20 + 16 * GetCastLevel(myHero, _E) + BonusAP * 0.2 + MaxMana * 0.02
+	local QDmg = 35 + 25 * GetCastLevel(myHero, _Q) + BonusAP * 0.45 + MaxMana * 0.03
+	local WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.2 + MaxMana * 0.01
+	local EDmg = 25 + 25 * GetCastLevel(myHero, _E) + BonusAP * 0.3 + MaxMana * 0.02
 	local QPredTarget = GetPredictionForPlayer(myHeroPos(), target, GetMoveSpeed(target), 1700, 250, 900, 50, false, true)
-
-	--STACKS DRAWING
-	if RyzeMenu.Drawings.DS:Value() then
-		if IsObjectAlive(myHero) then		
-			DrawText('Stacks: ' .. Stacks, 16, drawPos.x, drawPos.y, GoS.White)
-		end
-	end
 
 	--CURRENT TARGET CIRCLE
 	if RyzeMenu.Drawings.CT:Value() then
@@ -820,34 +532,36 @@ OnDraw(function (myHero)
 			end
 
 			--DRAW DMG ON HP BAR
-			if Ready(_Q) and Ready(_W) and Ready(_E) then
+			if RyzeMenu.Drawings.DDMG:Value() then
+				if Ready(_Q) and Ready(_W) and Ready(_E) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg) + CalcDamage(myHero, enemy, 0, WDmg) + CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg) + CalcDamage(myHero, enemy, 0, WDmg) + CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
 
-			elseif Ready(_Q) and Ready(_W) then
+				elseif Ready(_Q) and Ready(_W) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg) + CalcDamage(myHero, enemy, 0, WDmg), GoS.Cyan)
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg) + CalcDamage(myHero, enemy, 0, WDmg), GoS.Cyan)
 
-			elseif Ready(_Q) and Ready(_E) then
+				elseif Ready(_Q) and Ready(_E) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg) + CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg) + CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
 
-			elseif Ready(_W) and Ready(_E) then
+				elseif Ready(_W) and Ready(_E) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, WDmg) + CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, WDmg) + CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
 
-			elseif Ready(_Q) then
+				elseif Ready(_Q) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg), GoS.Cyan)
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, QDmg), GoS.Cyan)
 
-			elseif Ready(_W) then
+				elseif Ready(_W) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, WDmg), GoS.Cyan)
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, WDmg), GoS.Cyan)
 
-			elseif Ready(_E) then
+				elseif Ready(_E) then
 
-				DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
-			
+					DrawDmgOverHpBar(enemy, GetCurrentHP(enemy), 0, CalcDamage(myHero, enemy, 0, EDmg), GoS.Cyan)
+				
+				end
 			end
 
 			--DRAW IF FASTER OR SLOWER
@@ -897,5 +611,5 @@ OnDrawMinimap(function (myHero)
 	end
 end)
 
-print('<font color = "#00FFFF"><b>[Corrupt Ryze]</b> <font color = "#FFFFFF">by <font color = "#FF69b4"><b>Sibyl</b> <font color = "#FFFFFF">Loaded!')
+print('<font color = "#00FFFF"><b>[Corrupt Ryze] Reworked</b> <font color = "#FFFFFF">by <font color = "#FF69b4"><b>Sibyl</b> <font color = "#FFFFFF">Loaded!')
 print('<font color = "#FFFFFF">->Please select <font color = "#FF0000"><b>IOW</b><font color = "#FFFFFF"> Orbwalker!')
