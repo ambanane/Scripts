@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
- ver = "0.7"
+ ver = "0.8"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -18,7 +18,7 @@ GetWebResultAsync('https://raw.githubusercontent.com/ambanane/Scripts/master/Cor
  RyzeMenu = Menu('Ryze', 'Corrupt Ryze')
 
 RyzeMenu:SubMenu('Combo', 'Combo')
-RyzeMenu.Combo:DropDown('ComboMode', 'Combo mode', 1, {'QEQW', 'QWQE'})
+RyzeMenu.Combo:DropDown('ComboMode', 'Combo mode', 1, {'QEQW', 'QWQE', 'EQWQ'})
 RyzeMenu.Combo:Boolean('Q', 'Use Q', true)
 RyzeMenu.Combo:Boolean('W', 'Use W', true)
 RyzeMenu.Combo:Boolean('E', 'Use E', true)
@@ -27,11 +27,6 @@ RyzeMenu:SubMenu('Killsteal', 'Killsteal')
 RyzeMenu.Killsteal:Boolean('KQ', 'Killsteal with Q', true)
 RyzeMenu.Killsteal:Boolean('KW', 'Killsteal with W', true)
 RyzeMenu.Killsteal:Boolean('KE', 'Killsteal with E', true)
-
-RyzeMenu:SubMenu('LaneClear', 'Lane clear')
-RyzeMenu.LaneClear:Boolean('LCQ', 'Use Q', true)
-RyzeMenu.LaneClear:Boolean('LCW', 'Use W', true)
-RyzeMenu.LaneClear:Boolean('LCE', 'Use E', true)
 
 RyzeMenu:SubMenu('Farm', 'Farm')
 RyzeMenu.Farm:Boolean('LH', 'Last hit minions AA', false)
@@ -55,6 +50,7 @@ RyzeMenu.Misc.Skin:Slider('SC', 'Select skin', 1, 1, 10)
 RyzeMenu:SubMenu('Drawings', 'Drawings')
 RyzeMenu.Drawings:Boolean('DQ', 'Draw Q range', true)
 RyzeMenu.Drawings:Boolean('DWE', 'Draw W&E range', true)
+RyzeMenu.Drawings:Boolean('DR', 'Draw R range', true)
 RyzeMenu.Drawings:Boolean('DDMG', 'Draw DMG on HP bar', true)
 RyzeMenu.Drawings:Boolean('DCM', 'Draw circle on minions', true)
 RyzeMenu.Drawings:Boolean('SF', 'Draw if slower or faster', true)
@@ -123,6 +119,14 @@ OnTick(function (myHero)
 			ComboW()
 			ComboQ()
 			ComboE()
+		end
+
+		--EQWQ
+		if RyzeMenu.Combo.ComboMode:Value() == 3 then
+			ComboE()
+			ComboQ()
+			ComboW()
+			ComboQ()
 		end
 
 	else
@@ -275,24 +279,42 @@ OnTick(function (myHero)
 	end
 
 	--LANE CLEAR / JUNGLE CLEAR
-		if IOW:Mode() == 'LaneClear' then
-			for _, minion in pairs(minionManager.objects) do
-
-				if RyzeMenu.LaneClear.LCQ:Value() and Ready(_Q) and ValidTarget(minion, QRange) then
-					CastSkillShot(_Q, minion)
+	x = 0
+	closestMinion = ClosestMinion(myHero, 300 - GetTeam(myHero))
+	if IOW:Mode() == 'LaneClear' then
+		for _, minion in pairs(minionManager.objects) do
+			if ValidTarget(minion, ERange) then
+				if GotBuff(minion, 'RyzeE') > 0 then
+					IOW:ResetAA()
+					buffData = GetBuffData(minion, 'RyzeE')
+					if buffData.Count > 0 then
+						x = x + 1
+					end
+					if Ready(_E) and ValidTarget(minion, ERange) then
+						CastTargetSpell(minion, _E)
+					end
+					if GetCurrentHP(minion) < (QDmg + QDmg * 0.4) then
+						if Ready(_Q) and ValidTarget(minion, QRange) then
+							CastSkillShot(_Q, minion)
+						end
+					end
+					if x > 1 then
+						if Ready(_W) and ValidTarget(minion, WRange) then
+							if GetCurrentHP(minion) <= WDmg then
+								CastTargetSpell(minion, _W)
+							end
+						end
+					end
+				else
+					if Ready(_E) and ValidTarget(minion, ERange) and GetCurrentHP(minion) <= EDmg then
+						CastTargetSpell(minion, _E)
+					elseif Ready(_E) and ValidTarget(minion, ERange) then
+						CastTargetSpell(minion, _E)
+					end
 				end
-
-				if RyzeMenu.LaneClear.LCW:Value() and Ready(_W) and ValidTarget(minion, WRange) then
-					CastTargetSpell(minion, _W)
-				end
-
-				if RyzeMenu.LaneClear.LCE:Value() and Ready(_E) and ValidTarget(minion, ERange) then
-					CastTargetSpell(minion, _E)
-				end
-
 			end
 		end
-
+	end
 
 	--KILLSTEAL
 	for _, enemy in pairs(GetEnemyHeroes()) do
@@ -427,6 +449,10 @@ OnDraw(function (myHero)
 	local QRange = 900
 	local WRange = 600
 	local ERange = 600
+	RRange = 1500
+	if GetCastLevel(myHero, _R) == 2 then
+		RRange = 3000
+	end
 	local QDmg = 35 + 25 * GetCastLevel(myHero, _Q) + BonusAP * 0.45 + MaxMana * 0.03
 	local WDmg = 60 + 20 * GetCastLevel(myHero, _W) + BonusAP * 0.2 + MaxMana * 0.01
 	local EDmg = 25 + 25 * GetCastLevel(myHero, _E) + BonusAP * 0.3 + MaxMana * 0.02
@@ -481,12 +507,21 @@ OnDraw(function (myHero)
 			end
 		end
 
-		--W&E Range
+		--W&E RANGE
 		if RyzeMenu.Drawings.DWE:Value() then
 			if Ready(_W) or Ready(_E) then
 				DrawCircle(GetOrigin(myHero), WRange, 5, 100, ARGB(100, 0, 150, 150))
 			else
 				DrawCircle(GetOrigin(myHero), WRange, 5, 100, ARGB(100, 255, 0, 0))
+			end
+		end
+
+		--R RANGE
+		if RyzeMenu.Drawings.DR:Value() and GetCastLevel(myHero, _R) > 0 then
+			if Ready(_R) then
+				DrawCircle(GetOrigin(myHero), RRange, 5, 100, ARGB(100, 0, 150, 150))
+			else
+				DrawCircle(GetOrigin(myHero), RRange, 5, 100, ARGB(100, 255, 0, 0))
 			end
 		end
 
