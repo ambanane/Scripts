@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
 
- ver = "0.8"
+ ver = "0.9"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
@@ -280,37 +280,38 @@ OnTick(function (myHero)
 
 	--LANE CLEAR / JUNGLE CLEAR
 	x = 0
+	closestJungle = ClosestMinion(myHero, 300)
 	closestMinion = ClosestMinion(myHero, 300 - GetTeam(myHero))
 	if IOW:Mode() == 'LaneClear' then
 		for _, minion in pairs(minionManager.objects) do
-			if ValidTarget(minion, ERange) then
-				if GotBuff(minion, 'RyzeE') > 0 then
-					IOW:ResetAA()
-					buffData = GetBuffData(minion, 'RyzeE')
-					if buffData.Count > 0 then
-						x = x + 1
+			if GotBuff(minion, 'RyzeE') > 0 then
+				IOW:ResetAA()
+				buffData = GetBuffData(minion, 'RyzeE')
+				if buffData.Count > 0 then
+					x = x + 1
+				end
+				if Ready(_E) and ValidTarget(minion, ERange) then
+					CastTargetSpell(minion, _E)
+				end
+				if GetCurrentHP(minion) < (QDmg + QDmg * 0.4) then
+					if Ready(_Q) and ValidTarget(minion, QRange) then
+						CastSkillShot(_Q, minion)
 					end
-					if Ready(_E) and ValidTarget(minion, ERange) then
-						CastTargetSpell(minion, _E)
-					end
-					if GetCurrentHP(minion) < (QDmg + QDmg * 0.4) then
-						if Ready(_Q) and ValidTarget(minion, QRange) then
-							CastSkillShot(_Q, minion)
+				end
+				if x > 1 then
+					if Ready(_W) and ValidTarget(minion, WRange) then
+						if GetCurrentHP(minion) <= WDmg then
+							CastTargetSpell(minion, _W)
 						end
 					end
-					if x > 1 then
-						if Ready(_W) and ValidTarget(minion, WRange) then
-							if GetCurrentHP(minion) <= WDmg then
-								CastTargetSpell(minion, _W)
-							end
-						end
-					end
-				else
-					if Ready(_E) and ValidTarget(minion, ERange) and GetCurrentHP(minion) <= EDmg then
-						CastTargetSpell(minion, _E)
-					elseif Ready(_E) and ValidTarget(minion, ERange) then
-						CastTargetSpell(minion, _E)
-					end
+				end
+			else
+				if Ready(_E) and ValidTarget(minion, ERange) and GetCurrentHP(minion) <= EDmg then
+					CastTargetSpell(minion, _E)
+				elseif Ready(_E) and ValidTarget(closestMinion, ERange) then
+					CastTargetSpell(closestMinion, _E)
+				elseif Ready(_E) and ValidTarget(closestJungle, ERange) then
+					CastTargetSpell(closestJungle, _E)
 				end
 			end
 		end
